@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Srikanth Photography — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--olive:#4B4A2F;--olive2:#6b6840;--dark:#3E3D28;--cream:#F2F0EA;--ivory:#F7F5F0;--gold:#C2BBA3;--taupe:#8A8575;--line:rgba(75,74,47,.18);--danger:#b3261e;--ok:#2e7d4f;--serif:'Cormorant Garamond',Georgia,serif;--sans:'Jost',sans-serif}
+body{background:var(--cream);color:#2a2a1e;font-family:var(--sans);line-height:1.5;min-height:100vh}
+button{font-family:inherit}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--olive);outline-offset:2px}
+
+#login{position:fixed;inset:0;background:var(--dark);display:grid;place-items:center;z-index:900}
+.lbox{background:var(--ivory);padding:44px 40px;width:min(420px,92vw);border-top:3px solid var(--gold)}
+.lbox h1{font-family:var(--serif);font-style:italic;font-weight:400;font-size:32px;color:var(--olive);margin-bottom:6px}
+.lbox p{font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:var(--taupe);margin-bottom:26px}
+.lbox label{font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--olive2);display:block;margin-bottom:6px}
+.lbox input{width:100%;padding:12px 14px;border:1px solid var(--line);background:#fff;font:inherit;font-size:16px;margin-bottom:18px}
+.lbox button{width:100%;padding:14px;background:var(--olive);color:#fff;border:0;font-size:10px;letter-spacing:.3em;text-transform:uppercase;cursor:pointer}
+.lbox button:hover{background:var(--olive2)}
+.lerr{color:var(--danger);font-size:14px;margin-top:12px;min-height:20px}
+
+.top{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--line);height:68px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.top .logo{font-family:var(--serif);font-style:italic;font-size:24px;color:var(--olive)}
+.top .r{display:flex;align-items:center;gap:16px;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--taupe)}
+.top button{background:none;border:1px solid var(--line);color:var(--olive);padding:8px 16px;cursor:pointer;font-size:9px;letter-spacing:.3em;text-transform:uppercase}
+.top button:hover{background:var(--ivory)}
+.body{max-width:1280px;margin:0 auto;padding:32px 24px 140px}
+.head{padding-bottom:24px;border-bottom:1px solid var(--line)}
+.head h1{font-family:var(--serif);font-weight:400;font-size:38px;color:var(--olive)}
+.head p{color:var(--taupe);margin-top:6px;max-width:52em;font-size:15px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:28px 0}
+.stat{background:#fff;padding:16px 20px}
+.stat b{font-family:var(--serif);font-weight:500;font-size:30px;color:var(--olive);display:block;line-height:1.1}
+.stat span{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--taupe)}
+
+.tabs{display:flex;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:28px}
+.tab{background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;padding:12px 16px;font-size:9.5px;letter-spacing:.25em;text-transform:uppercase;color:var(--taupe);cursor:pointer}
+.tab:hover{color:var(--olive)}
+.tab.on{color:var(--olive);border-bottom-color:var(--olive)}
+.panel h2{font-family:var(--serif);font-style:italic;font-weight:400;font-size:28px;color:var(--olive);margin-bottom:6px}
+.panel .desc{color:var(--taupe);margin-bottom:22px;max-width:50em;font-size:15px}
+.note{background:rgba(194,187,163,.2);border:1px solid var(--gold);padding:12px 16px;font-size:14px;margin-bottom:22px;max-width:52em}
+
+.drop{position:relative;border:2px dashed rgba(75,74,47,.3);background:#fff;padding:34px 20px;text-align:center;margin-bottom:22px;cursor:pointer;transition:.2s}
+.drop:hover,.drop.over{border-color:var(--olive);background:var(--ivory)}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop b{font-family:var(--serif);font-weight:500;font-size:21px;color:var(--olive);display:block;margin-bottom:4px}
+.drop span{color:var(--taupe);font-size:14px}
+.drop.full{opacity:.55;cursor:not-allowed;border-style:solid}
+.drop.full input{pointer-events:none}
+.count{font-size:14px;color:var(--taupe);margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.item{background:#fff;border:1px solid var(--line)}
+.item .im{aspect-ratio:4/5;background:var(--beige,#EDEBE6);overflow:hidden}
+.item .im img{width:100%;height:100%;object-fit:cover}
+.item .bar{display:flex;border-top:1px solid var(--line)}
+.item .bar button{flex:1;padding:9px 0;background:none;border:0;cursor:pointer;font-size:15px}
+.item .bar button+button{border-left:1px solid var(--line)}
+.item .bar button:hover{background:var(--ivory)}
+.item .bar .del{color:var(--danger);font-size:12px}
+.item .bar button:disabled{opacity:.3;cursor:default}
+.emptybox{border:1px dashed rgba(75,74,47,.3);padding:40px;text-align:center;color:var(--taupe)}
+
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:26px}
+.vcard{background:#fff;border:1px solid var(--line)}
+.vcard .vt{aspect-ratio:9/16;max-height:360px;width:100%;background:#241a20;overflow:hidden}
+.vcard .vt video{width:100%;height:100%;object-fit:cover}
+.vcard .vb{padding:14px}
+.vcard input{width:100%;border:1px solid var(--line);padding:9px 12px;font:inherit;font-size:15px;margin-bottom:10px}
+.vcard .vact{display:flex;gap:8px}
+.sm{background:none;border:1px solid var(--line);padding:7px 14px;font-size:9px;letter-spacing:.25em;text-transform:uppercase;font-weight:600;cursor:pointer}
+.sm:hover{border-color:var(--olive)}
+.sm:disabled{opacity:.3;cursor:default}
+.sm.del{color:var(--danger);border-color:rgba(179,38,30,.35)}
+.sm.del:hover{background:var(--danger);color:#fff}
+.addv{background:#fff;border:1px solid var(--line);padding:22px;max-width:640px}
+.addv h3{font-family:var(--serif);font-weight:500;font-size:22px;color:var(--olive);margin-bottom:14px}
+.addv input[type=text]{width:100%;border:1px solid var(--line);padding:11px 12px;font:inherit;margin-bottom:10px}
+.btn{background:var(--olive);color:#fff;border:0;padding:11px 24px;font-weight:600;font-size:9px;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;position:relative;overflow:hidden;display:inline-block}
+.btn:hover{background:var(--olive2)}
+.btn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.hv{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;background:#fff;border:1px solid var(--line);padding:18px;margin-bottom:22px;max-width:720px}
+.hv video{width:240px;max-height:300px;object-fit:cover;background:#241a20}
+.hv .e{width:240px;height:135px;background:var(--ivory);display:grid;place-items:center;color:var(--taupe);font-size:14px}
+.hv b{font-family:var(--serif);font-weight:500;font-size:21px;color:var(--olive)}
+.hv p{color:var(--taupe);font-size:14px;margin:4px 0 14px;max-width:26em}
+
+.savebar{position:fixed;left:0;right:0;bottom:0;z-index:300;background:var(--olive);color:#fff;padding:14px 24px;display:none;align-items:center;justify-content:space-between;gap:16px;border-top:2px solid var(--gold)}
+.savebar.on{display:flex}
+.savebar button{background:var(--gold);color:var(--dark);border:0;padding:11px 28px;font-weight:700;font-size:9px;letter-spacing:.25em;text-transform:uppercase;cursor:pointer}
+.savebar button:disabled{opacity:.6}
+.load{position:fixed;inset:0;background:rgba(242,240,234,.9);z-index:800;display:none;place-items:center}
+.load.on{display:grid}
+.spin{width:34px;height:34px;border:3px solid var(--line);border-top-color:var(--olive);border-radius:50%;animation:s .8s linear infinite;margin:0 auto 12px}
+@keyframes s{to{transform:rotate(360deg)}}
+.toasts{position:fixed;right:20px;bottom:90px;z-index:950;display:grid;gap:8px}
+.toast{padding:12px 18px;font-size:14px;color:#fff;background:var(--dark);max-width:320px}
+.toast.ok{background:var(--ok)}.toast.err{background:var(--danger)}
+@media(max-width:700px){.savebar{flex-wrap:wrap}.top{padding:10px 16px}#saved{display:none}}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="lbox">
+    <h1>Srikanth Photography</h1>
+    <p>Admin sign-in</p>
+    <label for="pw">Password</label>
+    <input id="pw" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+    <button onclick="login()">Sign in</button>
+    <div class="lerr" id="lerr"></div>
+  </div>
+</div>
+
+<div id="app" hidden>
+  <div class="top">
+    <span class="logo">Srikanth Photography</span>
+    <div class="r"><span id="saved">Not saved yet this session</span><button onclick="logout()">Sign out</button></div>
+  </div>
+  <div class="body">
+    <div class="head">
+      <h1>Site manager</h1>
+      <p>Add or remove every photo and video on your website. Changes appear on the live site after you press Save.</p>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="tabs" id="tabs"></div>
+    <div id="panels"></div>
+  </div>
+</div>
+
+<div class="savebar" id="savebar"><span>You have unsaved changes. Save to update your live website.</span><button id="saveBtn" onclick="save()">Save changes</button></div>
+<div class="load" id="load"><div style="text-align:center"><div class="spin"></div><div id="loadTxt">Loading</div></div></div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+/* ═══════════════ CONFIG — edit these 4 lines ═══════════════ */
+const CLOUD_NAME    = 'dba4lfjm1';                 // your Cloudinary cloud name
+const UPLOAD_PRESET = 'srikanth photography';      // unsigned upload preset name (must match exactly)
+const JSONBIN_KEY   = 'PASTE_YOUR_JSONBIN_MASTER_KEY';  // must match index.html
+const JSONBIN_ID    = 'PASTE_YOUR_BIN_ID';              // must match index.html
+const ADMIN_PASSWORD= 'srikanthphotography';
+
+const MAX_CAT=12, MAX_RECENT=24, MAX_VIDEOS=9;
+
+const IMG_SECTIONS = [
+  {key:'aboutPhoto', tab:'About photo', label:'About photo', max:1, desc:'The round portrait in the About section. A clear, close photo works best.'},
+  {key:'wedding', tab:'Weddings', label:'Weddings', max:MAX_CAT},
+  {key:'prewedding', tab:'Pre-Wedding', label:'Pre-Wedding', max:MAX_CAT},
+  {key:'engagement', tab:'Engagement', label:'Engagement', max:MAX_CAT},
+  {key:'momtobe', tab:'Mom to Be', label:'Mom to Be', max:MAX_CAT},
+  {key:'haldi', tab:'Haldi', label:'Haldi', max:MAX_CAT},
+  {key:'recent', tab:'Recent work strip', label:'Recent work (scrolling strip)', max:MAX_RECENT, desc:'The portrait photos that scroll sideways under "Recent Work". Vertical photos look best.'}
+];
+const TAB_ORDER = ['Hero video','About photo','Weddings','Pre-Wedding','Engagement','Mom to Be','Haldi','Recent work strip','Video portfolio'];
+
+let data = { heroVideo:'', heroVideoMobile:'', aboutPhoto:[], wedding:[], prewedding:[], engagement:[], momtobe:[], haldi:[], recent:[], videos:[] };
+let dirty=false, busy=false;
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const cld=(u,t)=>(u&&u.includes('/upload/'))?u.replace('/upload/','/upload/'+t+'/'):u;
+
+/* ═══════════════ AUTH ═══════════════ */
+function login(){
+  if($('#pw').value===ADMIN_PASSWORD){ $('#login').hidden=true; $('#app').hidden=false; init(); }
+  else{ $('#lerr').textContent='That password is not right. Try again.'; $('#pw').value=''; setTimeout(()=>$('#lerr').textContent='',3000); }
+}
+function logout(){
+  if(dirty && !confirm('You have unsaved changes. Sign out anyway?')) return;
+  dirty=false; location.reload();
+}
+
+/* ═══════════════ JSONBIN ═══════════════ */
+function configured(){ return !JSONBIN_ID.startsWith('PASTE') && !JSONBIN_KEY.startsWith('PASTE'); }
+async function init(){
+  buildTabs();
+  if(!configured()){ render(); toast('Setup needed: add your JSONBin key and bin ID at the top of admin.html','err'); return; }
+  showLoad('Loading your site');
+  try{
+    const r=await fetch('https://api.jsonbin.io/v3/b/'+JSONBIN_ID+'/latest',{headers:{'X-Master-Key':JSONBIN_KEY}});
+    if(!r.ok) throw new Error(r.status);
+    const rec=(await r.json()).record||{};
+    data={...data,...rec};
+    Object.keys(data).forEach(k=>{ if(['heroVideo','heroVideoMobile'].includes(k)) return; if(!Array.isArray(data[k])) data[k]=[]; });
+    ['heroVideo','heroVideoMobile'].forEach(k=>{ if(typeof data[k]!=='string') data[k]=''; });
+    toast('Site loaded','ok');
+  }catch(e){ console.error(e); toast('Could not load. Check the JSONBin key and bin ID.','err'); }
+  hideLoad(); render();
+}
+async function save(){
+  if(!configured()){ toast('Add your JSONBin details first','err'); return; }
+  const b=$('#saveBtn'); b.disabled=true; b.textContent='Saving';
+  try{
+    const r=await fetch('https://api.jsonbin.io/v3/b/'+JSONBIN_ID,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN_KEY,'X-Bin-Versioning':'false'},body:JSON.stringify(data)});
+    if(!r.ok) throw new Error(r.status);
+    dirty=false; $('#savebar').classList.remove('on');
+    $('#saved').textContent='Last saved '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    toast('Saved. Your website is updated.','ok');
+  }catch(e){ console.error(e); toast('Save failed. Please try again.','err'); }
+  b.disabled=false; b.textContent='Save changes';
+}
+function markDirty(){ dirty=true; $('#savebar').classList.add('on'); }
+document.addEventListener('keydown',e=>{ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){ e.preventDefault(); if(dirty) save(); } });
+window.addEventListener('beforeunload',e=>{ if(dirty){ e.preventDefault(); e.returnValue=''; } });
+
+/* ═══════════════ CLOUDINARY ═══════════════ */
+function upload(file,kind,folder,onProgress){
+  return new Promise((resolve,reject)=>{
+    const fd=new FormData(); fd.append('file',file); fd.append('upload_preset',UPLOAD_PRESET); fd.append('folder','srikanth-photography/'+folder);
+    const x=new XMLHttpRequest();
+    x.open('POST','https://api.cloudinary.com/v1_1/'+CLOUD_NAME+'/'+kind+'/upload');
+    x.upload.onprogress=e=>{ if(e.lengthComputable&&onProgress) onProgress(Math.round(e.loaded/e.total*100)); };
+    x.onload=()=>{ try{ const j=JSON.parse(x.responseText); if(x.status>=200&&x.status<300&&j.secure_url) resolve(j.secure_url); else reject(new Error(j.error&&j.error.message||x.status)); }catch(err){reject(err);} };
+    x.onerror=()=>reject(new Error('Network error'));
+    x.send(fd);
+  });
+}
+
+/* ═══════════════ TABS + RENDER ═══════════════ */
+let curTab='Hero video';
+function buildTabs(){
+  $('#tabs').innerHTML=TAB_ORDER.map(t=>'<button class="tab'+(t===curTab?' on':'')+'" data-t="'+t+'">'+t+'</button>').join('');
+  $('#tabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>{curTab=b.dataset.t;buildTabs();render();});
+}
+function render(){
+  stats();
+  const p=$('#panels');
+  if(curTab==='Hero video'){ p.innerHTML='<div class="panel on">'+heroPanel()+'</div>'; bindHeroVideo(); return; }
+  if(curTab==='Video portfolio'){ p.innerHTML='<div class="panel on">'+videoPanel()+'</div>'; bindVideoPanel(); return; }
+  const sec=IMG_SECTIONS.find(s=>s.tab===curTab);
+  let h='<div class="panel on"><h2>'+sec.label+'</h2>';
+  if(sec.desc) h+='<p class="desc">'+sec.desc+'</p>';
+  h+=imgManager(sec)+'</div>';
+  p.innerHTML=h;
+  bindImgManager(sec);
+}
+function stats(){
+  const portfolio=['wedding','prewedding','engagement','momtobe','haldi'].reduce((s,k)=>s+(data[k]||[]).length,0);
+  $('#stats').innerHTML=[
+    [data.heroVideo?'Yes':'Default','Hero video'],
+    [portfolio,'Portfolio photos'],[(data.videos||[]).length,'Videos'],[(data.recent||[]).length,'Strip photos']
+  ].map(([n,l])=>'<div class="stat"><b>'+n+'</b><span>'+l+'</span></div>').join('');
+}
+
+/* ═══════════════ IMAGE MANAGER ═══════════════ */
+function imgManager(sec){
+  const list=data[sec.key]||[]; const full=list.length>=sec.max;
+  let h='<div class="drop'+(full?' full':'')+'" id="drop"><input type="file" id="fileIn" accept="image/*"'+(sec.max>1?' multiple':'')+(full?' disabled':'')+'>'
+    +'<b>'+(full?'This section is full':(sec.max===1?'Drop a photo or click to choose':'Drop photos or click to choose'))+'</b>'
+    +'<span>'+(full?'Remove a photo to add another.':'JPG, PNG or WebP. You can pick several at once. Uploads start right away.')+'</span></div>';
+  h+='<p class="count">'+list.length+' of '+sec.max+' photos'+(sec.max>1?'. Use the arrows to change the order.':'')+'</p>';
+  if(!list.length) return h+'<div class="emptybox">No photos here yet. The website shows its built-in photos until you add one.</div>';
+  h+='<div class="grid">'+list.map((u,i)=>'<div class="item"><div class="im"><img src="'+esc(cld(u,'q_auto,f_auto,w_320'))+'" alt="" loading="lazy"></div><div class="bar"><button data-a="l" data-i="'+i+'" title="Move earlier"'+(i===0?' disabled':'')+'>←</button><button data-a="r" data-i="'+i+'" title="Move later"'+(i===list.length-1?' disabled':'')+'>→</button><button class="del" data-a="d" data-i="'+i+'" title="Remove">Remove</button></div></div>').join('')+'</div>';
+  return h;
+}
+function bindImgManager(sec){
+  const inp=$('#fileIn'), drop=$('#drop');
+  if(inp) inp.onchange=()=>uploadImages(sec,[...inp.files]);
+  drop.ondragover=e=>{e.preventDefault();drop.classList.add('over');};
+  drop.ondragleave=()=>drop.classList.remove('over');
+  drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over'); if(!drop.classList.contains('full')) uploadImages(sec,[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')));};
+  $('#panels').querySelectorAll('.bar button').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i, list=data[sec.key];
+    if(b.dataset.a==='d'){ if(!confirm('Remove this photo from the website? It stays in your Cloudinary library.')) return; list.splice(i,1); }
+    if(b.dataset.a==='l'&&i>0) [list[i-1],list[i]]=[list[i],list[i-1]];
+    if(b.dataset.a==='r'&&i<list.length-1) [list[i+1],list[i]]=[list[i],list[i+1]];
+    markDirty(); render();
+  });
+}
+async function uploadImages(sec,files){
+  if(busy||!files.length) return;
+  if(!configured()){ toast('Add your JSONBin details first','err'); return; }
+  const list=data[sec.key]; const room=sec.max-list.length;
+  if(files.length>room){ toast('Only '+room+' space'+(room===1?'':'s')+' left. Uploading the first '+room+'.','err'); files=files.slice(0,room); }
+  busy=true; let ok=0;
+  for(let i=0;i<files.length;i++){
+    showLoad('Uploading photo '+(i+1)+' of '+files.length);
+    try{ const url=await upload(files[i],'image',sec.key); list.push(url); ok++; markDirty(); }
+    catch(e){ console.error(e); toast('Could not upload '+files[i].name+': '+e.message,'err'); }
+  }
+  busy=false; hideLoad(); render();
+  if(ok) toast(ok+' photo'+(ok>1?'s':'')+' added. Press Save to publish.','ok');
+}
+
+/* ═══════════════ HERO VIDEO ═══════════════ */
+function vslot(key,label,hint){
+  const v=data[key];
+  return '<div class="hv">'+(v?'<video src="'+esc(v)+'" muted loop playsinline controls preload="metadata"></video>':'<div class="e">No video</div>')
+   +'<div><b>'+label+'</b><p>'+hint+'</p>'
+   +(v?'<button class="sm del" data-hvdel="'+key+'">Remove video</button>':'<label class="btn">Upload video<input type="file" data-hvin="'+key+'" accept="video/*"></label>')+'</div></div>';
+}
+function heroPanel(){
+  return '<h2>Hero video</h2><p class="desc">The full-screen video at the top of the website.</p>'
+   +'<div class="note">Add a wide video for computers and, optionally, a tall one for phones. If you only add one it is used on both. Remove a video to go back to the built-in one. Keep each under 100 MB (Cloudinary free plan limit).</div>'
+   +vslot('heroVideo','Computer hero video','Wide (landscape) video for computers and tablets.')
+   +vslot('heroVideoMobile','Phone hero video','Tall (portrait) video for phones. Optional.');
+}
+function bindHeroVideo(){
+  $('#panels').querySelectorAll('[data-hvdel]').forEach(b=>b.onclick=()=>{ if(!confirm('Remove this hero video?')) return; data[b.dataset.hvdel]=''; markDirty(); render(); });
+  $('#panels').querySelectorAll('[data-hvin]').forEach(i=>i.onchange=async()=>{
+    const f=i.files[0], key=i.dataset.hvin; if(!f) return;
+    if(!configured()){ toast('Add your JSONBin details first','err'); return; }
+    showLoad('Uploading hero video');
+    try{ data[key]=await upload(f,'video','hero',p=>$('#loadTxt').textContent='Uploading hero video '+p+'%'); markDirty(); toast('Hero video added. Press Save to publish.','ok'); }
+    catch(e){ console.error(e); toast('Video upload failed: '+e.message,'err'); }
+    hideLoad(); render();
+  });
+}
+
+/* ═══════════════ VIDEO PORTFOLIO ═══════════════ */
+function videoPanel(){
+  const list=data.videos||[]; const full=list.length>=MAX_VIDEOS;
+  let h='<h2>Video portfolio</h2><p class="desc">The vertical reels in the Video Portfolio section. Up to '+MAX_VIDEOS+'. The title appears under each video.</p>';
+  h+='<p class="count">'+list.length+' of '+MAX_VIDEOS+' videos</p>';
+  h+=list.length?'<div class="vgrid">'+list.map((v,i)=>'<div class="vcard"><div class="vt"><video src="'+esc(v.url)+'" muted playsinline preload="metadata" controls></video></div><div class="vb"><input type="text" data-t="'+i+'" value="'+esc(v.title||'')+'" placeholder="Video title"><div class="vact"><button class="sm" data-v="l" data-i="'+i+'"'+(i===0?' disabled':'')+'>←</button><button class="sm" data-v="r" data-i="'+i+'"'+(i===list.length-1?' disabled':'')+'>→</button><button class="sm del" data-v="d" data-i="'+i+'">Remove</button></div></div></div>').join('')+'</div>':'<div class="emptybox" style="margin-bottom:26px">No videos yet. The website shows its built-in videos until you add one.</div>';
+  h+='<div class="addv"><h3>Add a video</h3>'
+    +(full?'<p style="color:var(--taupe)">All '+MAX_VIDEOS+' slots are used. Remove a video to add another.</p>':
+    '<input type="text" id="vTitle" placeholder="Title, e.g. Wedding Film"><label class="btn">Upload a video file<input type="file" id="vFile" accept="video/*"></label>')
+    +'</div>';
+  return h;
+}
+function bindVideoPanel(){
+  $('#panels').querySelectorAll('input[data-t]').forEach(i=>i.oninput=()=>{ data.videos[+i.dataset.t].title=i.value; markDirty(); });
+  $('#panels').querySelectorAll('button[data-v]').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i, l=data.videos;
+    if(b.dataset.v==='d'){ if(!confirm('Remove this video from the website?')) return; l.splice(i,1); }
+    if(b.dataset.v==='l'&&i>0) [l[i-1],l[i]]=[l[i],l[i-1]];
+    if(b.dataset.v==='r'&&i<l.length-1) [l[i+1],l[i]]=[l[i],l[i+1]];
+    markDirty(); render();
+  });
+  const f=$('#vFile');
+  if(f) f.onchange=async()=>{
+    const file=f.files[0]; if(!file) return;
+    if(!configured()){ toast('Add your JSONBin details first','err'); return; }
+    showLoad('Uploading video');
+    try{ const url=await upload(file,'video','videos',p=>$('#loadTxt').textContent='Uploading video '+p+'%');
+      data.videos.push({url,title:$('#vTitle').value.trim()||'Wedding Film'}); markDirty(); toast('Video added. Press Save to publish.','ok'); }
+    catch(e){ console.error(e); toast('Video upload failed: '+e.message,'err'); }
+    hideLoad(); render();
+  };
+}
+
+/* ═══════════════ UI HELPERS ═══════════════ */
+function showLoad(t){ $('#loadTxt').textContent=t; $('#load').classList.add('on'); }
+function hideLoad(){ $('#load').classList.remove('on'); }
+function toast(m,t){ const e=document.createElement('div'); e.className='toast '+(t||''); e.textContent=m; $('#toasts').appendChild(e); setTimeout(()=>e.remove(),4200); }
+</script>
+</body>
+</html>
