@@ -1293,6 +1293,76 @@
     const nav = document.getElementById('mainNav');
     nav.style.padding = window.scrollY > 60 ? '12px 48px' : '18px 48px';
   });
+    // ── LIVE CONTENT FROM ADMIN (JSONBin) ──
+  const BIN_ID  = 'PASTE_YOUR_BIN_ID';
+  const BIN_KEY = 'PASTE_YOUR_JSONBIN_MASTER_KEY';
+
+  (function(){
+    const st = document.createElement('style');
+    st.textContent = '.pf-row{display:flex;justify-content:center;gap:0;margin-top:3px}.pf-row img{width:33.333%;height:400px;object-fit:cover;cursor:pointer;filter:saturate(.9);display:block}@media(max-width:900px){.pf-row{flex-direction:column}.pf-row img{width:100%;height:300px}}';
+    document.head.appendChild(st);
+  })();
+
+  (async function loadLive(){
+    try {
+      const r = await fetch('https://api.jsonbin.io/v3/b/' + BIN_ID + '/latest', { headers: { 'X-Master-Key': BIN_KEY } });
+      if (!r.ok) return;
+      const d = (await r.json()).record || {};
+      const opt = u => (u && u.includes('/upload/')) ? u.replace('/upload/', '/upload/q_auto,f_auto/') : u;
+
+      // Hero video (phone version used on small screens if provided)
+      const hv = (window.innerWidth < 700 && d.heroVideoMobile) ? d.heroVideoMobile : d.heroVideo;
+      if (hv) {
+        const v = document.getElementById('heroVideo');
+        v.innerHTML = '<source src="' + hv + '" type="video/mp4">';
+        v.load(); v.play().catch(()=>{});
+      }
+
+      // About photo
+      if (d.aboutPhoto && d.aboutPhoto[0]) document.querySelector('.about-img-wrap img').src = opt(d.aboutPhoto[0]);
+
+      // Portfolio sections
+      const map = { wedding:'weddings', prewedding:'prewedding', engagement:'engagement', momtobe:'momtobe', haldi:'haldi' };
+      Object.entries(map).forEach(([key, id]) => {
+        const list = d[key];
+        if (!Array.isArray(list) || !list.length) return;
+        galleries[key] = list;
+        const sec = document.getElementById(id);
+        [...sec.children].forEach(c => { if (!c.classList.contains('portfolio-section-title')) c.remove(); });
+        for (let i = 0; i < list.length; i += 3) {
+          const row = list.slice(i, i + 3);
+          const wrap = document.createElement('div');
+          wrap.className = row.length === 3 ? 'portfolio-grid' : 'pf-row';
+          if (i > 0) wrap.style.marginTop = '3px';
+          row.forEach((u, j) => {
+            const im = document.createElement('img');
+            im.src = opt(u); im.alt = key; im.loading = 'lazy';
+            im.addEventListener('click', () => openLightbox(key, i + j));
+            wrap.appendChild(im);
+          });
+          sec.appendChild(wrap);
+        }
+      });
+
+      // Recent work scrolling strip
+      if (Array.isArray(d.recent) && d.recent.length) {
+        const track = document.getElementById('scrollTrack');
+        const imgs = d.recent.map(u => '<img class="scroll-img" src="' + opt(u) + '" alt="">').join('');
+        track.innerHTML = imgs + imgs;
+      }
+
+      // Video portfolio
+      if (Array.isArray(d.videos) && d.videos.length) {
+        const grid = document.querySelector('.videos-grid');
+        const play = '<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="23" stroke="rgba(247,245,240,0.8)" stroke-width="1.5"/><polygon points="20,16 34,24 20,32" fill="rgba(247,245,240,0.9)"/></svg>';
+        grid.innerHTML = d.videos.map(v =>
+          '<div class="video-item"><div class="video-frame"><video muted loop playsinline preload="metadata"><source src="' + v.url + '" type="video/mp4"></video>' +
+          '<div class="video-play-btn" onclick="toggleVideo(this)">' + play + '</div></div>' +
+          '<div class="video-label">' + (v.title || '').replace(/</g, '&lt;') + '</div></div>'
+        ).join('');
+      }
+    } catch (e) { console.error('Live content failed', e); }
+  })();
 </script>
 </body>
 </html>
